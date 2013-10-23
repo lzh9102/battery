@@ -1,5 +1,5 @@
 /* battery.c - show battery status
- * 2012-12-21 Timothy Lin <lzh9102@gmail.com>
+ * Che-Huai Lin <lzh9102@gmail.com>
  */
 
 #include <stdio.h>
