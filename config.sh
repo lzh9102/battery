@@ -16,6 +16,7 @@ elif [ -e $PREFIX/BAT1 ]; then
 	PREFIX=$PREFIX/BAT1
 else
 	echo "config error: cannot find BAT0 or BAT1 in $PREFIX" > /dev/stderr
+	echo "battery not found" > /dev/stderr
 	exit 1
 fi
 
