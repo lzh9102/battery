@@ -6,35 +6,27 @@ echo
 
 PREFIX=/sys/class/power_supply
 
-# guess "online" file
+# guess "online" file (whether the AC adapter is plugged in)
 if [ -e $PREFIX/ACAD/online ]; then
 	IS_CHARGING_FILE=$PREFIX/ACAD/online
 else
 	IS_CHARGING_FILE=
 fi
 
-# guess battery path (BAT0 or BAT1)
-if [ -e $PREFIX/BAT0 ]; then
-	PREFIX=$PREFIX/BAT0
-elif [ -e $PREFIX/BAT1 ]; then
-	PREFIX=$PREFIX/BAT1
-else
+# guess battery path (BAT{index})
+for index in `seq 0 9`; do
+	if [ -e $PREFIX/BAT${index}/ ]; then
+		BAT_PATH=$PREFIX/BAT${index}/
+		break
+	fi
+done
+if [ -z "$BAT_PATH" ]; then
 	echo "config error: cannot find BAT0 or BAT1 in $PREFIX" > /dev/stderr
 	echo "battery not found" > /dev/stderr
 	exit 1
 fi
 
-# guess system file prefix (charge_ or energy_)
-if [ -e $PREFIX/charge_full ]; then
-	PREFIX=$PREFIX/charge
-elif [ -e $PREFIX/energy_full ]; then
-	PREFIX=$PREFIX/charge
-else
-	echo "config error: cannot find $PREFIX/charge_full or $PREFIX/energy_full" > /dev/stderr
-	exit 1
-fi
-
-echo "#define PREFIX \"$PREFIX\""
+echo "#define BAT_PATH \"$BAT_PATH\""
 if [ ! -z "$IS_CHARGING_FILE" ]; then
 	echo "#define IS_CHARGING_FILE \"$IS_CHARGING_FILE\""
 fi

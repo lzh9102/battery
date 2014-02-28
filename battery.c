@@ -30,8 +30,8 @@ long read_number_from_file(const char *filename)
 int main(int argc, char *argv[])
 {
 	/* get battery status */
-	long bat_full = read_number_from_file(PREFIX "_full");
-	long bat_now = read_number_from_file(PREFIX "_now");
+	long bat_full = read_number_from_file(BAT_PATH "charge_full");
+	long bat_now = read_number_from_file(BAT_PATH "charge_now");
 	if (bat_full < 0 || bat_now < 0)
 		error_exit("battery not found");
 
