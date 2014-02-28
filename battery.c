@@ -15,6 +15,7 @@ void error_exit(const char *msg)
 int main(int argc, char const *argv[])
 {
 	int bat_full, bat_now;
+	int charge_percent = 0;
 	int is_charging = 0;
 	FILE *f;
 	const char *battery_not_found_msg = "battery not found";
@@ -41,7 +42,9 @@ int main(int argc, char const *argv[])
 	}
 #endif
 
-	printf("[%d%c]", bat_now * 100 / bat_full, is_charging ? '+' : '-');
+	charge_percent = bat_now * 100 / bat_full;
+
+	printf("[%d%c]", charge_percent, is_charging ? '+' : '-');
 
 	return 0;
 }
