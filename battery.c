@@ -41,7 +41,7 @@ int main(int argc, char const *argv[])
 	}
 #endif
 
-	printf("[%d%%%c]", bat_now * 100 / bat_full, is_charging ? '+' : '-');
+	printf("[%d%c]", bat_now * 100 / bat_full, is_charging ? '+' : '-');
 
 	return 0;
 }
