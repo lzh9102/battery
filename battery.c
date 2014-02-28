@@ -30,9 +30,9 @@ long read_number_from_file(const char *filename)
 int main(int argc, char *argv[])
 {
 	/* get battery status */
-	long bat_full = read_number_from_file(BAT_PATH "charge_full");
-	long bat_now = read_number_from_file(BAT_PATH "charge_now");
-	if (bat_full < 0 || bat_now < 0)
+	long charge_full = read_number_from_file(BAT_PATH "charge_full");
+	long charge_now = read_number_from_file(BAT_PATH "charge_now");
+	if (charge_full < 0 || charge_now < 0)
 		error_exit("battery not found");
 
 #ifdef IS_CHARGING_FILE
@@ -54,7 +54,7 @@ int main(int argc, char *argv[])
 		}
 	}
 
-	int charge_percent = bat_now * 100 / bat_full;
+	int charge_percent = charge_now * 100 / charge_full;
 
 	printf("[%d%c]\n", charge_percent, is_charging ? '+' : '-');
 
