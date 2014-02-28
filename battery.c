@@ -14,7 +14,7 @@ void error_exit(const char *msg)
 
 int main(int argc, char const *argv[])
 {
-	int bat_full, bat_now;
+	long bat_full, bat_now;
 	int charge_percent = 0;
 	int is_charging = 0;
 	FILE *f;
@@ -24,14 +24,14 @@ int main(int argc, char const *argv[])
 	f = fopen(PREFIX "_full", "r");
 	if (!f)
 		error_exit(battery_not_found_msg);
-	fscanf(f, "%d", &bat_full);
+	fscanf(f, "%ld", &bat_full);
 	fclose(f);
 
 	/* get battery current status */
 	f = fopen(PREFIX "_now", "r");
 	if (!f)
 		error_exit(battery_not_found_msg);
-	fscanf(f, "%d", &bat_now);
+	fscanf(f, "%ld", &bat_now);
 	fclose(f);
 
 #ifdef IS_CHARGING_FILE
