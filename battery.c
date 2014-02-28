@@ -12,37 +12,35 @@ void error_exit(const char *msg)
 	exit(1);
 }
 
-int main(int argc, char const *argv[])
+/* read a non-negative integer from the file
+ * returns -1 on error
+ */
+long read_number_from_file(const char *filename)
 {
-	long bat_full, bat_now;
-	int charge_percent = 0;
-	int is_charging = 0;
-	FILE *f;
-	const char *battery_not_found_msg = "battery not found";
-
-	/* get battery full status */
-	f = fopen(PREFIX "_full", "r");
-	if (!f)
-		error_exit(battery_not_found_msg);
-	fscanf(f, "%ld", &bat_full);
-	fclose(f);
-
-	/* get battery current status */
-	f = fopen(PREFIX "_now", "r");
-	if (!f)
-		error_exit(battery_not_found_msg);
-	fscanf(f, "%ld", &bat_now);
-	fclose(f);
-
-#ifdef IS_CHARGING_FILE
-	f = fopen(IS_CHARGING_FILE, "r");
+	long result = -1;
+	FILE *f = fopen(filename, "r");
 	if (f) {
-		fscanf(f, "%d", &is_charging);
+		fscanf(f, "%ld", &result);
 		fclose(f);
 	}
+	return result;
+}
+
+int main(int argc, char const *argv[])
+{
+	/* get battery status */
+	long bat_full = read_number_from_file(PREFIX "_full");
+	long bat_now = read_number_from_file(PREFIX "_now");
+	if (bat_full < 0 || bat_now < 0)
+		error_exit("battery not found");
+
+#ifdef IS_CHARGING_FILE
+	int is_charging = (int)read_number_from_file(IS_CHARGING_FILE);
+	if (is_charging < 0)
+		is_charging = 0;
 #endif
 
-	charge_percent = bat_now * 100 / bat_full;
+	int charge_percent = bat_now * 100 / bat_full;
 
 	printf("[%d%c]", charge_percent, is_charging ? '+' : '-');
 
