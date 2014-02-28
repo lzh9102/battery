@@ -15,6 +15,7 @@ void error_exit(const char *msg)
 int main(int argc, char const *argv[])
 {
 	int bat_full, bat_now;
+	int is_charging = 0;
 	FILE *f;
 	const char *battery_not_found_msg = "battery not found";
 
@@ -32,7 +33,15 @@ int main(int argc, char const *argv[])
 	fscanf(f, "%d", &bat_now);
 	fclose(f);
 
-	printf(FORMAT, bat_now * 100 / bat_full);
+#ifdef IS_CHARGING_FILE
+	f = fopen(IS_CHARGING_FILE, "r");
+	if (f) {
+		fscanf(f, "%d", &is_charging);
+		fclose(f);
+	}
+#endif
+
+	printf("[%d%%%c]", bat_now * 100 / bat_full, is_charging ? '+' : '-');
 
 	return 0;
 }

@@ -1,13 +1,17 @@
 #!/bin/sh
 
-# output format, "n" will be replaced with the percentage value (0~100)
-OUTPUT_FORMAT="n%"
-
 echo "#ifndef _CONFIG_H_"
 echo "#define _CONFIG_H_"
 echo
 
 PREFIX=/sys/class/power_supply
+
+# guess "online" file
+if [ -e $PREFIX/ACAD/online ]; then
+	IS_CHARGING_FILE=$PREFIX/ACAD/online
+else
+	IS_CHARGING_FILE=
+fi
 
 # guess battery path (BAT0 or BAT1)
 if [ -e $PREFIX/BAT0 ]; then
@@ -30,10 +34,10 @@ else
 	exit 1
 fi
 
-FORMAT=`echo "$OUTPUT_FORMAT" | sed 's/%/%%/' | sed 's/n/%d/'`
-
 echo "#define PREFIX \"$PREFIX\""
-echo "#define FORMAT \"$FORMAT\\n\""
+if [ ! -z "$IS_CHARGING_FILE" ]; then
+	echo "#define IS_CHARGING_FILE \"$IS_CHARGING_FILE\""
+fi
 echo
 echo "#endif /* _CONFIG_H_ */"
 
