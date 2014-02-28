@@ -42,7 +42,7 @@ int main(int argc, char const *argv[])
 
 	int charge_percent = bat_now * 100 / bat_full;
 
-	printf("[%d%c]", charge_percent, is_charging ? '+' : '-');
+	printf("[%d%c]\n", charge_percent, is_charging ? '+' : '-');
 
 	return 0;
 }
