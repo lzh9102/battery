@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
 	int charge_percent = charge_now * 100 / charge_full;
 
 	if (opt_short) /* short format (for tmux, zsh, ...) */
-		printf("[%d%c]\n", charge_percent, is_charging ? '+' : '-');
+		printf("%d%c\n", charge_percent, is_charging ? '+' : '-');
 	else { /* detailed report */
 		/* charge level and status */
 		const char *status = is_charging ? "charging" : "discharging";
