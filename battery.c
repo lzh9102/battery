@@ -8,12 +8,6 @@
 #include <string.h>
 #include "config.h"
 
-void error_exit(const char *msg)
-{
-	fprintf(stderr, msg);
-	exit(1);
-}
-
 /* read a non-negative integer from the file
  * returns -1 on error
  */
@@ -53,8 +47,13 @@ int main(int argc, char *argv[])
 	/* get battery status */
 	long charge_full = read_number_from_file(BAT_PATH "charge_full");
 	long charge_now = read_number_from_file(BAT_PATH "charge_now");
-	if (charge_full < 0 || charge_now < 0)
-		error_exit("battery not found");
+	if (charge_full < 0 || charge_now < 0) {
+		if (opt_short)
+			printf("!\n");
+		else
+			printf("battery not found!\n");
+		exit(1);
+	}
 
 #ifdef IS_CHARGING_FILE
 	int is_charging = (int)read_number_from_file(IS_CHARGING_FILE);
