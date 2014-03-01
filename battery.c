@@ -37,18 +37,6 @@ void format_remaining_time(char *buffer, int bufsize, int seconds)
 
 int main(int argc, char *argv[])
 {
-	/* get battery status */
-	long charge_full = read_number_from_file(BAT_PATH "charge_full");
-	long charge_now = read_number_from_file(BAT_PATH "charge_now");
-	if (charge_full < 0 || charge_now < 0)
-		error_exit("battery not found");
-
-#ifdef IS_CHARGING_FILE
-	int is_charging = (int)read_number_from_file(IS_CHARGING_FILE);
-	if (is_charging < 0)
-		is_charging = 0;
-#endif
-
 	/* parse command-line options */
 	char ch;
 	int opt_short = 0;
@@ -61,6 +49,18 @@ int main(int argc, char *argv[])
 				break;
 		}
 	}
+
+	/* get battery status */
+	long charge_full = read_number_from_file(BAT_PATH "charge_full");
+	long charge_now = read_number_from_file(BAT_PATH "charge_now");
+	if (charge_full < 0 || charge_now < 0)
+		error_exit("battery not found");
+
+#ifdef IS_CHARGING_FILE
+	int is_charging = (int)read_number_from_file(IS_CHARGING_FILE);
+	if (is_charging < 0)
+		is_charging = 0;
+#endif
 
 	int charge_percent = charge_now * 100 / charge_full;
 
